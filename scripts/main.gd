@@ -3,6 +3,7 @@ extends Node3D
 const Jelly = preload("res://scripts/jelly.gd")
 var characters: Array = []
 var camera: Camera3D
+var stage_material: ShaderMaterial
 
 func _ready() -> void:
     _bind_key("move_left", KEY_A)
@@ -41,10 +42,9 @@ func _ready() -> void:
     mesh.size = box.size
     surface.mesh = mesh
     surface.position = stage_shape.position
-    var material := StandardMaterial3D.new()
-    material.albedo_color = Color("aaa68f")
-    material.roughness = 0.9
-    surface.material_override = material
+    stage_material = ShaderMaterial.new()
+    stage_material.shader = preload("res://shaders/stage_contact.gdshader")
+    surface.material_override = stage_material
     stage.add_child(surface)
     # A quiet inset boundary, without a wall: bodies can fall off every side.
     for side in range(4):
@@ -80,6 +80,11 @@ func _ready() -> void:
     for character in characters:
         character.peers = characters
     _hud()
+
+# Visual-only shadow positions; movement and collision remain in the physics loop.
+func _process(_delta: float) -> void:
+    for index in range(characters.size()):
+        stage_material.set_shader_parameter("body_%d" % index, characters[index].global_position)
 
 func _bind_key(action: String, key: Key) -> void:
     if not InputMap.has_action(action):
