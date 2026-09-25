@@ -1,0 +1,17 @@
+# Godot 4: regenerated editor and import cache
+/.godot/
+
+# Local export output (keep export_presets.cfg and source assets)
+/build/
+/dist/
+/exports/
+/export_credentials.cfg
+
+# macOS metadata
+.DS_Store
+._*
+
+# Original local task brief (contains machine-specific paths)
+/prompt.md
+
+# Keep *.uid files: they preserve Godot resource identifiers.
